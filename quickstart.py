@@ -1,4 +1,3 @@
-from __future__ import print_function
 import datetime
 import pickle
 import os.path
@@ -64,7 +63,7 @@ def main():
     }
 
     event = service.events().insert(calendarId='primary', body=event).execute()
-    print('Event created: %s'.format(event.get('htmlLink')))
+    print("Event created: %s" % (event.get('htmlLink')))
 
 ''' now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 
