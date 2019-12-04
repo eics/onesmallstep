@@ -33,10 +33,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav mr-auto mt-2">
-                    <li class="nav-item"><a class="nav-link" href="/quote">Quote</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/buy">Buy</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sell">Sell</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/sample">Sample</a></li>
                 </ul>
                 <ul class="navbar-nav ml-auto mt-2">
                     <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -57,14 +54,28 @@
         </main>
 
         <!-- The core Firebase JS SDK is always required and must be listed first -->
-        <script src="/__/firebase/7.5.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
 
         <!-- TODO: Add SDKs for Firebase products that you want to use
             https://firebase.google.com/docs/web/setup#available-libraries -->
-        <script src="/__/firebase/7.5.0/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
 
-        <!-- Initialize Firebase -->
-        <script src="/__/firebase/init.js"></script>
+        <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyA2vmyl0gALdmnWgp-4eXSH7-gZPA7Cyns",
+            authDomain: "one-small-step-7bbfc.firebaseapp.com",
+            databaseURL: "https://one-small-step-7bbfc.firebaseio.com",
+            projectId: "one-small-step-7bbfc",
+            storageBucket: "one-small-step-7bbfc.appspot.com",
+            messagingSenderId: "60915909030",
+            appId: "1:60915909030:web:5a451673ed3fb41163cf67",
+            measurementId: "G-EXTVN53M2K"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        </script>
 
     </body>
 

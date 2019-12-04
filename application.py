@@ -40,6 +40,13 @@ def index():
     else:
         return render_template("index.html")
 
+@app.route("/sample", methods=["GET", "POST"])
+def sample():
+    if request.method == "POST":
+        return apology("TODO")
+    else:
+        return render_template("sample.html")
+
 
 def errorhandler(e):
     """Handle error"""
