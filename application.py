@@ -40,21 +40,21 @@ Session(app)
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        searchterm = request.form.get("searchterm") # name the search term searchterm!!
+        searchterm = request.form.get("searchterm")
         results = db.execute("SELECT * FROM goals WHERE name LIKE '%:searchterm%'", searchterm=searchterm)
-        return redirect("/searchresults", results=results)
+        return redirect("/searchresults", results=results, term=searchterm)
     else:
         return render_template("index.html")
 
 @app.route("/searchresult", methods=["GET", "POST"]) # need make searchresult.html that loops through the results, makes button for each one that sends out the id for that result
-def searchresult(results):
+def searchresult(results, term):
     if request.method == "POST":
         goal_id = request.form.get("goal_id")
         result = db.execute("SELECT * FROM goals WHERE id = :goalid", goalid=goal_id)
         goalname = result[0]["name"]
         return redirect("goals/%s" % (goalname), goal_id=goal_id, result=result[0])
     else: 
-        return render_template("searchresult.html", results)
+        return render_template("searchresult.html", results, term)
 
 
 @app.route("/goals/<goalname>", methods=["GET", "POST"]) # make goal.html to render goal info from result and steps from csv

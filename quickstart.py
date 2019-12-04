@@ -57,6 +57,6 @@ def createtask(startdate, frequency, goaldata):
             'due': '%sT12:00:00.000Z' % (startdate),
             'parent': name
             }
-            result = service.tasks().insert(tasklist='@default', body=task).execute() # I can create parent task first then do for loop or create a new tasklist. but i think new parent better
+            result = service.tasks().insert(tasklist='@default', body=task).execute()
             print(result['id'])
             startdate += timedelta(days=frequency) 
