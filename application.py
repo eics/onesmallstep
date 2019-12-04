@@ -40,12 +40,12 @@ def index():
     else:
         return render_template("index.html")
 
-@app.route("/sample", methods=["GET", "POST"])
-def sample():
+@app.route("/goal", methods=["GET", "POST"])
+def goal():
     if request.method == "POST":
         return apology("TODO")
     else:
-        return render_template("sample.html")
+        return render_template("goal.html")
 
 
 def errorhandler(e):
