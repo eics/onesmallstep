@@ -50,15 +50,15 @@ def index():
 def searchresult(results):
     if request.method == "POST":
         goal_id = request.form.get("goal_id")
-        results = db.execute("SELECT * FROM goals WHERE id = :goalid", goalid=goal_id)
-        goalname = results[0]["name"]
-        return redirect("goals/<goalname>", goalname=goalname, goal_id=goal_id, results=results)
+        result = db.execute("SELECT * FROM goals WHERE id = :goalid", goalid=goal_id)
+        goalname = result[0]["name"]
+        return redirect("goals/<goalname>", goalname=goalname, goal_id=goal_id, result=result[0])
     else: 
         return render_template("searchresult.html", results)
 
 
-@app.route("goals/<goalname>", methods=["GET", "POST"], goalname=goal)
-def goal(goalname, goal_id, results):
+@app.route("goals/<goalname>", methods=["GET", "POST"], goalname=goal) # make goal.html to render goal info from result and steps from csv
+def goal(goalname, goal_id, result):
     if request.method == "POST":
         # Ensure start date was submitted
         if not request.form.get("startdate"):
@@ -68,8 +68,8 @@ def goal(goalname, goal_id, results):
         if not request.form.get("frequency"):
             return apology("Commit yourself to a frequency!!", 403)
         frequency = request.form.get("frequency")
-        createtask(startdate, frequency, results)
-    return render_template("goal.html", results=results)
+        createtask(startdate, frequency, result) 
+    return render_template("goal.html", goaldata=result)
 
 
 # Upload file

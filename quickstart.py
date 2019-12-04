@@ -1,11 +1,14 @@
 from __future__ import print_function
+import csv
 import pickle
 import os.path
+from datetime import datetime  
+from datetime import timedelta
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-def createtask():
+def createtask((startdate, frequency, goaldata):
 
     # If modifying these scopes, delete the file token.pickle.
     SCOPES = ['https://www.googleapis.com/auth/tasks']
@@ -33,12 +36,27 @@ def createtask():
 
     service = build('tasks', 'v1', credentials=creds)
 
-    # Call the Tasks API
-    task = {
-    'title': 'Figure Out Firebase',
-    'notes': 'CS50',
-    'due': '2019-12-3T12:00:00.000Z'
-    }
+    # make parent task with goal name and desc
+    name = goaldata["name"].replace('-', ' ')
+    desc = goaldata["desc"]
 
-    result = service.tasks().insert(tasklist='@default', body=task).execute() # I can create parent task first then do for loop or create a new tasklist. but i think new parent better
-    print(result['id'])
+    task = {
+            'title': name,
+            'notes': desc
+            }
+    service.tasks().insert(tasklist='@default', body=task).execute()
+
+    # make subtasks from csv
+    with open('%s.csv' % (goaldata["name"])) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            # Call the Tasks API
+            task = {
+            'title': name + ': ' + row[0],
+            'notes': row[1],
+            'due': '%sT12:00:00.000Z' % (startdate)
+            'parent': name
+            }
+            result = service.tasks().insert(tasklist='@default', body=task).execute() # I can create parent task first then do for loop or create a new tasklist. but i think new parent better
+            print(result['id'])
+            startdate += timedelta(days=frequency) 
