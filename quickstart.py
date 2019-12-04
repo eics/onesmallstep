@@ -5,10 +5,10 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-# If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/tasks']
+def createtask():
 
-def main():
+    # If modifying these scopes, delete the file token.pickle.
+    SCOPES = ['https://www.googleapis.com/auth/tasks']
     """Shows basic usage of the Tasks API.
     Prints the title and ID of the first 10 task lists.
     """
@@ -42,6 +42,3 @@ def main():
 
     result = service.tasks().insert(tasklist='@default', body=task).execute() # I can create parent task first then do for loop or create a new tasklist. but i think new parent better
     print(result['id'])
-
-if __name__ == '__main__':
-    main()

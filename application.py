@@ -8,7 +8,10 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
+from quickstart import createtask
 from helpers import apology, login_required, lookup, usd
+
+db = SQL("sqlite:///goals.db")
 
 # Configure application
 app = Flask(__name__)
@@ -41,17 +44,25 @@ def index():
     else:
         return render_template("index.html")
 
-@app.route("/goal", methods=["GET", "POST"])
-def goal():
+'''
+@app.route("/<goalname>", methods=["GET", "POST"])
+def goal(goalname):
     if request.method == "POST":
-        return apology("Goal TODO")
-    else:
-        return render_template("goal.html")
-
+        # Ensure start date was submitted
+        if not request.form.get("startdate"):
+            return apology("What are goals without a start date?!", 403)
+        startdate = request.form.get("startdate")
+        # Ensure frequency was submitted
+        elif not request.form.get("frequency"):
+            return apology("Commit yourself to a frequency!!", 403)
+        frequency = request.form.get("frequency")
+        createtask(startdate, frequency, )
+    return render_template("buy.html")
+'''
 
 # Upload file
 # From https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
-UPLOAD_FOLDER = 'csvfiles/'
+UPLOAD_FOLDER = './csvfiles'
 ALLOWED_EXTENSIONS = {'csv'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -62,6 +73,9 @@ def allowed_file(filename):
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
+        name = request.form.get("symbol")
+        symbol = request.form.get("symbol")
+
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -77,10 +91,8 @@ def upload():
             print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename).replace("\\","/"))
             print("2")
+            db.execute("INSERT INTO goals (name, desc, category_id)")
             return apology("Uploaded")
-        else:
-            flash('File not allowed')
-            return redirect(request.url)
     else:
         return render_template("upload.html")
 
