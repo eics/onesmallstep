@@ -57,7 +57,7 @@ def searchresult(results):
         return render_template("searchresult.html", results)
 
 
-@app.route("goals/<goalname>", methods=["GET", "POST"]) # make goal.html to render goal info from result and steps from csv
+@app.route("/goals/<goalname>", methods=["GET", "POST"]) # make goal.html to render goal info from result and steps from csv
 def goal(goalname, goal_id, result):
     if request.method == "POST":
         # Ensure start date was submitted
