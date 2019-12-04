@@ -5,7 +5,18 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/goal" method="post">
+    <h3>{{ goaldata["name"] }}</h3>
+    <h5>{{ goaldata["desc"] }}</h5>
+    <ol>
+        {% for step in steps %}
+            <li>{{ step["step"] }}</li>
+            <ul>
+                <li>{{ step["description"] }}</li>
+            </ul>
+        {% endfor %}
+    </ol>
+
+    <form action="/goal/{{goaldata['goal_id']}}" method="post">
         <div class="form-group">
                 Start Date: <input autocomplete="off" autofocus class="form-control" name="startdate" placeholder="Start Date" type="date">
         </div>

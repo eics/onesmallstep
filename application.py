@@ -1,4 +1,5 @@
 import os
+import csv
 
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
@@ -45,17 +46,25 @@ def index():
 @app.route("/searchresults/<searchterm>", methods=["GET", "POST"]) # searchresult.html loops through the results, makes button for each one that sends out the id for that result
 def searchresult(searchterm):
     results = db.execute("SELECT * FROM goals WHERE name LIKE '%{}%'".format(searchterm))
-    if request.method == "POST":
-        goal_id = request.form.get("goal_id")
-        return redirect("goals/%s" % (goal_id))
-    else: 
-        return render_template("searchresult.html", results=results, term=searchterm)
+    """if request.method == "POST":
+        print("\n HERE \n")
+        goal_id = request.form["goal_id"]
+        print("\n" + goal_id + "\n")
+        return redirect("/goals/%s" % (goal_id))
+    else: """
+    return render_template("searchresult.html", results=results, term=searchterm)
 
 
-@app.route("/goals/<goal_id>", methods=["GET", "POST"]) # make goal.html to render goal info from result and steps from csv
+@app.route("/goals/<goal_id>", methods=["GET", "POST"]) # goal.html renders goal info from result and steps from csv
 def goal(goal_id):
-    result = db.execute("SELECT * FROM goals WHERE id = :goalid", goalid=goal_id)
+    goal_id = int(goal_id)
+    result = db.execute("SELECT * FROM goals WHERE goal_id = :goalid", goalid=goal_id)
     result=result[0]
+    steps=[]
+    with open('csvfiles/%s.csv' % (result["name"])) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            steps.append({"step": row[0], "description": row[1]})
     if request.method == "POST":
         # Ensure start date was submitted
         if not request.form.get("startdate"):
@@ -65,8 +74,8 @@ def goal(goal_id):
         if not request.form.get("frequency"):
             return apology("Commit yourself to a frequency!!", 403)
         frequency = request.form.get("frequency")
-        createtask(startdate, frequency, result) 
-    return render_template("goal.html", goaldata=result)
+        createtask(startdate, frequency, result, steps) 
+    return render_template("goal.html", goaldata=result, steps=steps)
 
 
 # Upload file
