@@ -41,12 +41,12 @@ Session(app)
 def index():
     if request.method == "POST":
         searchterm = request.form.get("searchterm")
-        results = db.execute("SELECT * FROM goals WHERE name LIKE '%:searchterm%'", searchterm=searchterm)
+        results = db.execute("SELECT * FROM goals WHERE name LIKE '%{}%'".format(searchterm))
         return redirect("/searchresults", results=results, term=searchterm)
     else:
         return render_template("index.html")
 
-@app.route("/searchresult", methods=["GET", "POST"]) # need make searchresult.html that loops through the results, makes button for each one that sends out the id for that result
+@app.route("/searchresult", methods=["GET", "POST"]) # searchresult.html loops through the results, makes button for each one that sends out the id for that result
 def searchresult(results, term):
     if request.method == "POST":
         goal_id = request.form.get("goal_id")

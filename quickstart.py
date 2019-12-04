@@ -47,7 +47,7 @@ def createtask(startdate, frequency, goaldata):
     service.tasks().insert(tasklist='@default', body=task).execute()
 
     # make subtasks from csv
-    with open('%s.csv' % (goaldata["name"])) as csvfile:
+    with open('csvfiles/%s.csv' % (goaldata["name"])) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for row in readCSV:
             # Call the Tasks API
