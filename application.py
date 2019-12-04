@@ -8,7 +8,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-### from quickstart import createtask
+from quickstart import createtask
 from helpers import apology, login_required, lookup, usd
 
 db = SQL("sqlite:///goals.db")
@@ -68,7 +68,7 @@ def goal(goalname, goal_id, result):
         if not request.form.get("frequency"):
             return apology("Commit yourself to a frequency!!", 403)
         frequency = request.form.get("frequency")
-        ###createtask(startdate, frequency, result) 
+        createtask(startdate, frequency, result) 
     return render_template("goal.html", goaldata=result)
 
 
@@ -96,14 +96,12 @@ def upload():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            print(filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename).replace("\\","/"))
-            print("2")
-            #### Continue database insert
+            goal_name = request.form.get("name").replace(" ", "-")
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], goal_name + ".csv").replace("\\","/"))
             db.execute("INSERT INTO goals (name, desc, category_id) VALUES (:name, :desc, :category_id)",
-                        name=filename, desc=request.form.get("desc"), category_id=request.form.get("cat_id"))
-            return apology("Uploaded")
+                        name=goal_name, desc=request.form.get("desc"), category_id=request.form.get("cat_id"))
+            flash('Uploaded :)')
+            return redirect(request.url)
     else:
         return render_template("upload.html")
 
