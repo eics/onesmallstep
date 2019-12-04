@@ -65,7 +65,7 @@ def goal(goalname, goal_id, results):
             return apology("What are goals without a start date?!", 403)
         startdate = request.form.get("startdate")
         # Ensure frequency was submitted
-        elif not request.form.get("frequency"):
+        if not request.form.get("frequency"):
             return apology("Commit yourself to a frequency!!", 403)
         frequency = request.form.get("frequency")
         createtask(startdate, frequency, results)
@@ -103,7 +103,9 @@ def upload():
             print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename).replace("\\","/"))
             print("2")
-            db.execute("INSERT INTO goals (name, desc, category_id)")
+            #### Continue database insert
+            db.execute("INSERT INTO goals (name, desc, category_id) VALUES (:name, :desc, :category_id)",
+                        name=filename, desc=request.form.get("desc"), category_id=request.form.get("cat_id"))
             return apology("Uploaded")
     else:
         return render_template("upload.html")
