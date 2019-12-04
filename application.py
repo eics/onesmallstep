@@ -8,7 +8,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from quickstart import createtask
+### from quickstart import createtask
 from helpers import apology, login_required, lookup, usd
 
 db = SQL("sqlite:///goals.db")
@@ -57,7 +57,7 @@ def searchresult(results):
         return render_template("searchresult.html", results)
 
 
-@app.route("goals/<goalname>", methods=["GET", "POST"], goalname=goal) # make goal.html to render goal info from result and steps from csv
+@app.route("goals/<goalname>", methods=["GET", "POST"], goalname=goalname) # make goal.html to render goal info from result and steps from csv
 def goal(goalname, goal_id, result):
     if request.method == "POST":
         # Ensure start date was submitted
@@ -68,7 +68,7 @@ def goal(goalname, goal_id, result):
         if not request.form.get("frequency"):
             return apology("Commit yourself to a frequency!!", 403)
         frequency = request.form.get("frequency")
-        createtask(startdate, frequency, result) 
+        ###createtask(startdate, frequency, result) 
     return render_template("goal.html", goaldata=result)
 
 
@@ -85,9 +85,6 @@ def allowed_file(filename):
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
-        name = request.form.get("symbol")
-        symbol = request.form.get("symbol")
-
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
