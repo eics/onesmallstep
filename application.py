@@ -52,12 +52,12 @@ def searchresult(results):
         goal_id = request.form.get("goal_id")
         result = db.execute("SELECT * FROM goals WHERE id = :goalid", goalid=goal_id)
         goalname = result[0]["name"]
-        return redirect("goals/<goalname>", goalname=goalname, goal_id=goal_id, result=result[0])
+        return redirect("goals/%s" % (goalname), goal_id=goal_id, result=result[0])
     else: 
         return render_template("searchresult.html", results)
 
 
-@app.route("goals/<goalname>", methods=["GET", "POST"], goalname=goal) # make goal.html to render goal info from result and steps from csv
+@app.route("goals/<goalname>", methods=["GET", "POST"]) # make goal.html to render goal info from result and steps from csv
 def goal(goalname, goal_id, result):
     if request.method == "POST":
         # Ensure start date was submitted
@@ -85,9 +85,6 @@ def allowed_file(filename):
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
-        name = request.form.get("symbol")
-        symbol = request.form.get("symbol")
-
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
