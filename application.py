@@ -40,13 +40,25 @@ Session(app)
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        return apology("TODO")
+        searchterm = request.form.get("searchterm") # name the search term searchterm!!
+        results = db.execute("SELECT * FROM goals WHERE name LIKE '%:searchterm%'", searchterm=searchterm)
+        return redirect("/searchresults", results=results)
     else:
         return render_template("index.html")
 
-'''
-@app.route("/<goalname>", methods=["GET", "POST"])
-def goal(goalname):
+@app.route("/searchresult", methods=["GET", "POST"]) # need make searchresult.html that loops through the results, makes button for each one that sends out the id for that result
+def searchresult(results):
+    if request.method == "POST":
+        goal_id = request.form.get("goal_id")
+        results = db.execute("SELECT * FROM goals WHERE id = :goalid", goalid=goal_id)
+        goalname = results[0]["name"]
+        return redirect("goals/<goalname>", goalname=goalname, goal_id=goal_id, results=results)
+    else: 
+        return render_template("searchresult.html", results)
+
+
+@app.route("goals/<goalname>", methods=["GET", "POST"], goalname=goal)
+def goal(goalname, goal_id, results):
     if request.method == "POST":
         # Ensure start date was submitted
         if not request.form.get("startdate"):
@@ -56,9 +68,9 @@ def goal(goalname):
         elif not request.form.get("frequency"):
             return apology("Commit yourself to a frequency!!", 403)
         frequency = request.form.get("frequency")
-        createtask(startdate, frequency, )
-    return render_template("buy.html")
-'''
+        createtask(startdate, frequency, results)
+    return render_template("goal.html", results=results)
+
 
 # Upload file
 # From https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
