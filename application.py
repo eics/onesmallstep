@@ -52,12 +52,12 @@ def searchresult(results):
         goal_id = request.form.get("goal_id")
         result = db.execute("SELECT * FROM goals WHERE id = :goalid", goalid=goal_id)
         goalname = result[0]["name"]
-        return redirect("goals/<goalname>", goalname=goalname, goal_id=goal_id, result=result[0])
+        return redirect("goals/%s" % (goalname), goal_id=goal_id, result=result[0])
     else: 
         return render_template("searchresult.html", results)
 
 
-@app.route("goals/<goalname>", methods=["GET", "POST"], goalname=goalname) # make goal.html to render goal info from result and steps from csv
+@app.route("goals/<goalname>", methods=["GET", "POST"]) # make goal.html to render goal info from result and steps from csv
 def goal(goalname, goal_id, result):
     if request.method == "POST":
         # Ensure start date was submitted
