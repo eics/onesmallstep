@@ -57,7 +57,7 @@ def searchresult(results):
         return render_template("searchresult.html", results)
 
 
-@app.route("goals/<goalname>", methods=["GET", "POST"]) # make goal.html to render goal info from result and steps from csv
+@app.route("/goals/<goalname>", methods=["GET", "POST"]) # make goal.html to render goal info from result and steps from csv
 def goal(goalname, goal_id, result):
     if request.method == "POST":
         # Ensure start date was submitted
@@ -82,7 +82,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/upload', methods=['GET', 'POST']) # make goal name from form into file name, replace spaces with dashes
 def upload():
     if request.method == 'POST':
         # check if the post request has the file part
