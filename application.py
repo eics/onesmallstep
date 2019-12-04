@@ -7,6 +7,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from quickstart import createtask
 from helpers import apology, login_required, lookup, usd
 
 # Configure application
@@ -40,12 +41,20 @@ def index():
     else:
         return render_template("index.html")
 
-@app.route("/goal", methods=["GET", "POST"])
-def goal():
+
+@app.route("/<goalname>", methods=["GET", "POST"])
+def goal(goalname):
     if request.method == "POST":
-        return apology("TODO")
-    else:
-        return render_template("goal.html")
+        # Ensure start date was submitted
+        if not request.form.get("startdate"):
+            return apology("What are goals without a start date?!", 403)
+        startdate = request.form.get("startdate")
+        # Ensure frequency was submitted
+        elif not request.form.get("frequency"):
+            return apology("Commit yourself to a frequency!!", 403)
+        frequency = request.form.get("frequency")
+        createtask(startdate, frequency, )
+    return render_template("buy.html")
 
 
 def errorhandler(e):
