@@ -8,7 +8,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-def createtask((startdate, frequency, goaldata):
+def createtask(startdate, frequency, goaldata):
 
     # If modifying these scopes, delete the file token.pickle.
     SCOPES = ['https://www.googleapis.com/auth/tasks']
@@ -54,9 +54,9 @@ def createtask((startdate, frequency, goaldata):
             task = {
             'title': name + ': ' + row[0],
             'notes': row[1],
-            'due': '%sT12:00:00.000Z' % (startdate)
+            'due': '%sT12:00:00.000Z' % (startdate),
             'parent': name
             }
-            result = service.tasks().insert(tasklist='@default', body=task).execute() # I can create parent task first then do for loop or create a new tasklist. but i think new parent better
+            result = service.tasks().insert(tasklist='@default', body=task).execute()
             print(result['id'])
             startdate += timedelta(days=frequency) 
