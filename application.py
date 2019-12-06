@@ -45,17 +45,21 @@ def index():
     else:
         return render_template("index.html")
 
-@app.route("/searchresults/<searchterm>", methods=["GET", "POST"]) # searchresult.html loops through the results, makes button for each one that sends out the id for that result
+
+# searchresult.html loops through the results, makes button for each one that sends out the id for that result
 def searchresult(searchterm):
+@app.route("/searchresults/<searchterm>", methods=["GET", "POST"]) 
     results = db.execute("SELECT * FROM goals WHERE name LIKE '%{}%'".format(searchterm))
     return render_template("searchresult.html", results=results, term=searchterm)
 
 
-@app.route("/goals/<goal_id>", methods=["GET", "POST"]) # goal.html renders goal info from result and steps from csv
+# goal.html renders goal info from result and steps from csv and has form for adding to tasks
+@app.route("/goals/<goal_id>", methods=["GET", "POST"])
 def goal(goal_id):
     goalid = int(goal_id)
     result = db.execute("SELECT * FROM goals WHERE goal_id = :goalid", goalid=goalid)
     result=result[0]
+    name = result["name"].replace("-", " ")
     steps=[]
     with open('csvfiles/%s.csv' % (result["name"])) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
@@ -70,9 +74,10 @@ def goal(goal_id):
         if not request.form.get("frequency"):
             return apology("Commit yourself to a frequency!!", 403)
         frequency = request.form.get("frequency")
+        flash('Adding tasks; please remain on this page until complete.')
         createtask(startdate, frequency, result, steps) 
         flash('Added to Google Tasks (view in Calendar/Gmail/App)!')
-    return render_template("goal.html", goaldata=result, steps=steps, goal_id=goal_id)
+    return render_template("goal.html", name=name, goaldata=result, steps=steps, goal_id=goal_id)
 
 
 # Upload file
@@ -85,7 +90,8 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/upload', methods=['GET', 'POST']) # make goal name from form into file name, replace spaces with dashes
+# make goal name from form into file name, replace spaces with dashes
+@app.route('/upload', methods=['GET', 'POST']) 
 def upload():
     if request.method == 'POST':
         # check if the post request has the file part
