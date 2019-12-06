@@ -3,8 +3,7 @@ Flask
 Flask-Session
 requests
 datetime
-pickle
-os.path
-googleapiclient.discovery
-google_auth_oauthlib.flow
-google.auth.transport.requests
+requests
+oauthlib
+pyOpenSSL
+Flask-Login
