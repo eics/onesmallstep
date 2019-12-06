@@ -222,10 +222,16 @@ def upload():
             # Rename file with submitted filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], goal_name + ".csv").replace("\\","/"))
 
+            # Check if private is checked
+            if request.form.get("private"):
+                private_bool = 1
+            else:
+                private_bool = 0
+
             # Insert new goal into SQL database
-            db.execute("INSERT INTO goals (name, desc, category_id) VALUES (:name, :desc, :category_id, :private)",
+            db.execute("INSERT INTO goals (name, desc, category_id, private, user_id) VALUES (:name, :desc, :category_id, :private, :user_id)",
                         name=goal_name, desc=request.form.get("desc"), category_id=request.form.get("cat_id"),
-                        request.form.get("private"))
+                        private=private_bool, user_id=current_user.get_id())
             flash('Goal uploaded :)')
             return redirect(request.url)
     else:
