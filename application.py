@@ -73,6 +73,9 @@ def goal(goal_id):
         # Ensure frequency was submitted
         if not request.form.get("frequency"):
             return apology("Commit yourself to a frequency!!", 403)
+        # Ensure category was submitted
+        if request.form.get("cat_id") == 0:
+            return apology("Select a valid category!!", 403)
         frequency = request.form.get("frequency")
         flash('Adding tasks; please remain on this page until complete.')
         createtask(startdate, frequency, result, steps) 
@@ -109,7 +112,7 @@ def upload():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], goal_name + ".csv").replace("\\","/"))
             db.execute("INSERT INTO goals (name, desc, category_id) VALUES (:name, :desc, :category_id)",
                         name=goal_name, desc=request.form.get("desc"), category_id=request.form.get("cat_id"))
-            flash('Uploaded :)')
+            flash('Goal uploaded :)')
             return redirect(request.url)
     else:
         return render_template("upload.html")
