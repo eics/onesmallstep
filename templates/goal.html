@@ -23,13 +23,29 @@
                 <div class="form-group">
                         Start Date: <input autocomplete="off" autofocus class="form-control" name="startdate" placeholder="Start Date" type="date">
                 </div>
+                <script>
+                        function toggleField(hideObj,showObj){
+                          hideObj.disabled=true;        
+                          hideObj.style.display='none';
+                          showObj.disabled=false;   
+                          showObj.style.display='inline';
+                          showObj.focus();
+                        }
+                        </script>
                 <div class="form-group">
-                        Frequency: <datalist name="frequency" id="frequency">
+                        Frequency: <select name="frequency"
+                                           id="frequency"
+                                           onchange="if(this.options[this.selectedIndex].value=='customOption'){
+                                           toggleField(this,this.nextSibling);
+                                           this.selectedIndex='0';
+                                            }">
                             <option value=1>Daily</option>
                             <option value=2>Every other day</option>
                             <option value=7>Weekly</option>
                             <option value=14>Every other week</option>
-                        </datalist>
+                        </select>
+                        <input name="days" style="display:none;" disabled="disabled" 
+                        onblur="if(this.value==''){toggleField(this,this.previousSibling);}">
                 </div>
                 <button class="btn btn-primary" type="submit">Go!</button>
                 Please remain on this page until complete. 
