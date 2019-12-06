@@ -40,7 +40,7 @@
                 </ul>
             </div>
             {% if current_user.is_authenticated %}
-                <img src={{ current_user.profile_pic }} alt="Google profile pic"></img>
+                <img id="profile-pic" src={{ current_user.profile_pic }} alt="Google profile pic"></img>
                 <a class="button" href="/logout">Logout</a> 
             {% else %}
                 <a class="button" href="/login">Google Sign-In</a>

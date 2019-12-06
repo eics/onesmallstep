@@ -48,11 +48,6 @@ GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "dkIpcyh4qvqkHB_mr
 GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
-# Configure session to use filesystem (instead of signed cookies)
-#app.config["SESSION_FILE_DIR"] = mkdtemp()
-#app.config["SESSION_PERMANENT"] = False
-#app.config["SESSION_TYPE"] = "filesystem"
-#Session(app)
 db = SQL("sqlite:///goals.db")
 
 app.secret_key = 'manyrandombytes'
@@ -221,10 +216,15 @@ def upload():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
+            # Set goal name to submitted name with dashes replacing spaces
             goal_name = request.form.get("name").replace(" ", "-")
+            # Rename file with submitted filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], goal_name + ".csv").replace("\\","/"))
-            db.execute("INSERT INTO goals (name, desc, category_id) VALUES (:name, :desc, :category_id)",
-                        name=goal_name, desc=request.form.get("desc"), category_id=request.form.get("cat_id"))
+
+            # Insert new goal into SQL database
+            db.execute("INSERT INTO goals (name, desc, category_id) VALUES (:name, :desc, :category_id, :private)",
+                        name=goal_name, desc=request.form.get("desc"), category_id=request.form.get("cat_id"),
+                        request.form.get("private"))
             flash('Goal uploaded :)')
             return redirect(request.url)
     else:
