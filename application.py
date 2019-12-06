@@ -159,7 +159,7 @@ def logout():
 # searchresult.html loops through the results, makes button for each one that sends out the id for that result
 @app.route("/searchresults/<searchterm>", methods=["GET", "POST"]) 
 def searchresult(searchterm):
-    results = db.execute("SELECT * FROM goals WHERE name LIKE '%{}% OR desc LIKE '%{}%' AND (private = 0 OR user_id = {})".format(searchterm, current_user.get_id()))
+    results = db.execute("SELECT * FROM goals WHERE name LIKE '%{}% OR desc LIKE '%{searchterm}%' AND (private = 0 OR user_id = {id})".format(searchterm=searchterm, id=current_user.get_id()))
     return render_template("searchresult.html", results=results, term=searchterm)
 
 
