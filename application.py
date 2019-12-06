@@ -47,8 +47,8 @@ def index():
 
 
 # searchresult.html loops through the results, makes button for each one that sends out the id for that result
-def searchresult(searchterm):
 @app.route("/searchresults/<searchterm>", methods=["GET", "POST"]) 
+def searchresult(searchterm):
     results = db.execute("SELECT * FROM goals WHERE name LIKE '%{}%'".format(searchterm))
     return render_template("searchresult.html", results=results, term=searchterm)
 
