@@ -48,11 +48,7 @@ GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "dkIpcyh4qvqkHB_mr
 GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
-# Configure session to use filesystem (instead of signed cookies)
-#app.config["SESSION_FILE_DIR"] = mkdtemp()
-#app.config["SESSION_PERMANENT"] = False
-#app.config["SESSION_TYPE"] = "filesystem"
-#Session(app)
+
 db = SQL("sqlite:///goals.db")
 
 app.secret_key = 'manyrandombytes'
@@ -163,7 +159,7 @@ def logout():
 # searchresult.html loops through the results, makes button for each one that sends out the id for that result
 @app.route("/searchresults/<searchterm>", methods=["GET", "POST"]) 
 def searchresult(searchterm):
-    results = db.execute("SELECT * FROM goals WHERE name LIKE '%{}%'".format(searchterm))
+    results = db.execute("SELECT * FROM goals WHERE name LIKE '%{}% OR desc LIKE '%{}%' AND (private = 0 OR user_id = {})".format(searchterm, current_user.get_id()))
     return render_template("searchresult.html", results=results, term=searchterm)
 
 
