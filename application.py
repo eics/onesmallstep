@@ -183,6 +183,9 @@ def goal(goal_id):
         # Ensure frequency was submitted
         if not request.form.get("frequency"):
             return apology("Commit yourself to a frequency!!", 403)
+        # Ensure category was submitted
+        if request.form.get("cat_id") == 0:
+            return apology("Select a valid category!!", 403)
         frequency = request.form.get("frequency")
         createtask(startdate, frequency, result, steps) 
         flash('Added to Google Tasks (view in Calendar/Gmail/App)!')
@@ -214,11 +217,16 @@ def upload():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
+            # Set goal name to submitted name with dashes replacing spaces
             goal_name = request.form.get("name").replace(" ", "-")
+            # Rename file with submitted filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], goal_name + ".csv").replace("\\","/"))
-            db.execute("INSERT INTO goals (name, desc, category_id) VALUES (:name, :desc, :category_id)",
-                        name=goal_name, desc=request.form.get("desc"), category_id=request.form.get("cat_id"))
-            flash('Uploaded :)')
+
+            # Insert new goal into SQL database
+            db.execute("INSERT INTO goals (name, desc, category_id) VALUES (:name, :desc, :category_id, :private)",
+                        name=goal_name, desc=request.form.get("desc"), category_id=request.form.get("cat_id"),
+                        request.form.get("private"))
+            flash('Goal uploaded :)')
             return redirect(request.url)
     else:
         return render_template("upload.html")

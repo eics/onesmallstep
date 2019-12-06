@@ -62,3 +62,9 @@ main .search
 {
     padding-right: 30px;
 }
+
+#profile-pic
+{
+    height: 50px;
+    margin-right: 10px;
+}
