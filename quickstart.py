@@ -48,6 +48,7 @@ def createtask(startdate, frequency, goaldata, steps):
             'notes': desc
             }
     service.tasks().insert(tasklist='@default', body=task).execute()
+    parent = result['id']
 
     print("\n startdate \n")
 
@@ -60,7 +61,7 @@ def createtask(startdate, frequency, goaldata, steps):
         'title': title,
         'notes': row["description"],
         'due': due,
-        'parent': name
+        'parent': parent
         }
         result = service.tasks().insert(tasklist='@default', body=task).execute()
         print(result['id'])
