@@ -47,7 +47,7 @@ def createtask(startdate, frequency, goaldata, steps):
             'title': name,
             'notes': desc
             }
-    service.tasks().insert(tasklist='@default', body=task).execute()
+    result = ervice.tasks().insert(tasklist='@default', body=task).execute()
     parent = result['id']
 
     print("\n startdate \n")
@@ -110,7 +110,8 @@ def main(startdate="2019-12-03", frequency=2):
             'title': name,
             'notes': desc
             }
-    service.tasks().insert(tasklist='@default', body=task).execute()
+    result = service.tasks().insert(tasklist='@default', body=task).execute()
+    parent = result['id']
 
     # make subtasks
     for row in steps:
@@ -121,7 +122,7 @@ def main(startdate="2019-12-03", frequency=2):
         'title': title,
         'notes': row["description"],
         'due': due,
-        'parent': name
+        'parent': parent
         }
         result = service.tasks().insert(tasklist='@default', body=task).execute()
         print(result['id'])
