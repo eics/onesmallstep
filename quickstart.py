@@ -47,7 +47,7 @@ def createtask(startdate, frequency, goaldata, steps):
             'title': name,
             'notes': desc
             }
-    result = ervice.tasks().insert(tasklist='@default', body=task).execute()
+    result = service.tasks().insert(tasklist='@default', body=task).execute()
     parent = result['id']
 
     print("\n startdate \n")
