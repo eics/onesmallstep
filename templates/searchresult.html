@@ -6,10 +6,11 @@
 
 {% block main %}
     <b>Search results for:</b> {{ term }}
+    <br>
     <table>
     {% for row in results %}
         <tr>
-            <td><a href="/goals/{{ row['goal_id'] }}">{{ row["name"].replace("-", ' ') }}</a></td>
+            <td class="search"><a href="/goals/{{ row['goal_id'] }}">{{ row["name"].replace("-", ' ') }}</a></td>
             <td>{{ row["desc"] }}</td>
         </tr>        
     {% endfor %}

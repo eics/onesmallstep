@@ -45,3 +45,20 @@ main img
     /* constrain images on small screens */
     max-width: 100%;
 }
+
+main .leftright{
+    display: flex;
+    margin-top: 20px;
+}
+main .left{
+    width: 50%;
+    text-align: left;
+}
+main .right{
+    flex-grow: 1;
+}
+
+main .search
+{
+    padding-right: 30px;
+}

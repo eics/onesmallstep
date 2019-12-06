@@ -1,37 +1,42 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Goal
+    {{ name }}
 {% endblock %}
 
 {% block main %}
     <h3>{{ name }}</h3>
     <h5>{{ goaldata["desc"] }}</h5>
-    <ol>
-        {% for step in steps %}
-            <li>{{ step["step"] }}</li>
-            <ul>
-                <li>{{ step["description"] }}</li>
-            </ul>
-        {% endfor %}
-    </ol>
-
-    <form action="{{ '/goals/' + goal_id }}" method="post">
-        <div class="form-group">
-                Start Date: <input autocomplete="off" autofocus class="form-control" name="startdate" placeholder="Start Date" type="date">
+    <div class="leftright">
+        <div class="left">
+            <ol>
+                {% for step in steps %}
+                    <li>{{ step["step"] }}</li>
+                    <ul>
+                        <li>{{ step["description"] }}</li>
+                    </ul>
+                {% endfor %}
+            </ol>
         </div>
-        <div class="form-group">
-                Frequency: <select name="frequency" id="frequency">
-                    <option value=1>Daily</option>
-                    <option value=2>Every other day</option>
-                    <option value=7>Weekly</option>
-                    <option value=14>Every other week</option>
-                    <!-- <option value="Custom">Custom</option> -->
-                </select>
+        <div class="right">
+            <form action="{{ '/goals/' + goal_id }}" method="post">
+                <div class="form-group">
+                        Start Date: <input autocomplete="off" autofocus class="form-control" name="startdate" placeholder="Start Date" type="date">
+                </div>
+                <div class="form-group">
+                        Frequency: <select name="frequency" id="frequency">
+                            <option value=1>Daily</option>
+                            <option value=2>Every other day</option>
+                            <option value=7>Weekly</option>
+                            <option value=14>Every other week</option>
+                            <!-- <option value="Custom">Custom</option> -->
+                        </select>
+                </div>
+                <button class="btn btn-primary" type="submit">Go!</button>
+                Please remain on this page until complete. 
+            </form>    
         </div>
-        <button class="btn btn-primary" type="submit">Go!</button>
-        Please remain on this page until complete. 
-    </form>    
+    </div>
 
 
 {% endblock %}
