@@ -21,10 +21,10 @@
         <div class="right">
             <form action="{{ '/goals/' + goal_id }}" method="post">
                 <div class="form-group">
-                        Start Date: <input autocomplete="off" autofocus class="form-control" name="startdate" placeholder="Start Date" type="date">
+                        Start Date: <input autocomplete="off" autofocus class="form-control" name="startdate" placeholder="Start Date" type="date" required>
                 </div>
                 <div class="form-group">
-                        Frequency: <datalist name="frequency" id="frequency">
+                        Frequency: <datalist name="frequency" id="frequency" required>
                             <option value=1>Daily</option>
                             <option value=2>Every other day</option>
                             <option value=7>Weekly</option>
