@@ -16,13 +16,12 @@
         {% endfor %}
     </ol>
 
-    <form action="/goal/{{goaldata['goal_id']}}" method="post">
+    <form action="{{ '/goals/' + goal_id }}" method="post">
         <div class="form-group">
                 Start Date: <input autocomplete="off" autofocus class="form-control" name="startdate" placeholder="Start Date" type="date">
         </div>
         <div class="form-group">
                 Frequency: <select name="frequency" id="frequency">
-                    <option value="select-freq">Select...</option>
                     <option value=1>Daily</option>
                     <option value=2>Every other day</option>
                     <option value=7>Weekly</option>

@@ -12,8 +12,6 @@ from werkzeug.utils import secure_filename
 from quickstart import createtask
 from helpers import apology, login_required, lookup, usd
 
-db = SQL("sqlite:///goals.db")
-
 # Configure application
 app = Flask(__name__)
 
@@ -29,10 +27,14 @@ def after_request(response):
     return response
 
 # Configure session to use filesystem (instead of signed cookies)
-#app.config["SESSION_FILE_DIR"] = mkdtemp()
-#app.config["SESSION_PERMANENT"] = False
-#app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_FILE_DIR"] = mkdtemp()
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+app.secret_key = 'many random bytes'
+
+db = SQL("sqlite:///goals.db")
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -46,19 +48,13 @@ def index():
 @app.route("/searchresults/<searchterm>", methods=["GET", "POST"]) # searchresult.html loops through the results, makes button for each one that sends out the id for that result
 def searchresult(searchterm):
     results = db.execute("SELECT * FROM goals WHERE name LIKE '%{}%'".format(searchterm))
-    """if request.method == "POST":
-        print("\n HERE \n")
-        goal_id = request.form["goal_id"]
-        print("\n" + goal_id + "\n")
-        return redirect("/goals/%s" % (goal_id))
-    else: """
     return render_template("searchresult.html", results=results, term=searchterm)
 
 
 @app.route("/goals/<goal_id>", methods=["GET", "POST"]) # goal.html renders goal info from result and steps from csv
 def goal(goal_id):
-    goal_id = int(goal_id)
-    result = db.execute("SELECT * FROM goals WHERE goal_id = :goalid", goalid=goal_id)
+    goalid = int(goal_id)
+    result = db.execute("SELECT * FROM goals WHERE goal_id = :goalid", goalid=goalid)
     result=result[0]
     steps=[]
     with open('csvfiles/%s.csv' % (result["name"])) as csvfile:
@@ -75,7 +71,8 @@ def goal(goal_id):
             return apology("Commit yourself to a frequency!!", 403)
         frequency = request.form.get("frequency")
         createtask(startdate, frequency, result, steps) 
-    return render_template("goal.html", goaldata=result, steps=steps)
+        #flash('Added to Google Tasks (view in Calendar/Gmail/App)!')
+    return render_template("goal.html", goaldata=result, steps=steps, goal_id=goal_id)
 
 
 # Upload file

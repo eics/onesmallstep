@@ -49,20 +49,25 @@ def createtask(startdate, frequency, goaldata, steps):
             }
     service.tasks().insert(tasklist='@default', body=task).execute()
 
+    print("\n startdate \n")
+
     # make subtasks
     for row in steps:
+        title = name + ': ' + row["step"]
+        due = '%sT12:00:00.000Z' % (startdate)
         # Call the Tasks API
         task = {
-        'title': name + ': ' + row[0],
-        'notes': row[1],
-        'due': '%sT12:00:00.000Z' % (startdate),
+        'title': title,
+        'notes': row["description"],
+        'due': due,
         'parent': name
         }
         result = service.tasks().insert(tasklist='@default', body=task).execute()
         print(result['id'])
-        startdate += timedelta(days=frequency) 
+        startdate = datetime.strptime(startdate, '%Y-%m-%d') + timedelta(days=int(frequency)) 
+        startdate = startdate.strftime('%Y-%m-%d')
 
-def main(startdate="19-12-03", frequency=2):
+def main(startdate="2019-12-03", frequency=2):
     goaldata = db.execute("SELECT * FROM goals WHERE goal_id = 5")[0]
     steps=[]
     with open('csvfiles/Work-Out.csv') as csvfile:
@@ -108,23 +113,25 @@ def main(startdate="19-12-03", frequency=2):
 
     # make subtasks
     for row in steps:
-        title = name + ': '
+        title = name + ': ' + row["step"]
         due = '%sT12:00:00.000Z' % (startdate)
         # Call the Tasks API
         task = {
-        'title': row[0],
-        'notes': row[1],
+        'title': title,
+        'notes': row["description"],
         'due': due,
         'parent': name
         }
         result = service.tasks().insert(tasklist='@default', body=task).execute()
         print(result['id'])
-        startdate += timedelta(days=frequency) 
+        startdate = datetime.strptime(startdate, '%Y-%m-%d') + timedelta(days=frequency) 
+        startdate = startdate.strftime('%Y-%m-%d')
 
 def test():
     """Shows basic usage of the Tasks API.
     Prints the title and ID of the first 10 task lists.
     """
+    SCOPES = ['https://www.googleapis.com/auth/tasks']
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
