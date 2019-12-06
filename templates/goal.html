@@ -9,6 +9,10 @@
     <h5>{{ goaldata["desc"] }}</h5>
     <div class="leftright">
         <div class="left">
+            <form action="{{ '/download/' + goal_id }}" method="get">
+                <button class="btn btn-primary" type="submit">Download & Modify</button>  Reupload <a href="/upload">here</a> to add your own changes.
+            </form>
+            <br>
             <ol>
                 {% for step in steps %}
                     <li>{{ step["step"] }}</li>

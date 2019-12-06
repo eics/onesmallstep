@@ -3,8 +3,7 @@ import json
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
-#from flask_session import Session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, send_from_directory, url_for
 from flask_login import (
     LoginManager,
     current_user,
@@ -155,46 +154,6 @@ def logout():
     logout_user()
     return redirect(url_for("index"))
 
-
-# searchresult.html loops through the results, makes button for each one that sends out the id for that result
-@app.route("/searchresults/<searchterm>", methods=["GET", "POST"]) 
-def searchresult(searchterm):
-    try: 
-        results = db.execute("SELECT * FROM goals WHERE (name LIKE '%{searchterm}%' OR desc LIKE '%{searchterm}%') AND (private = 0 OR user_id = {id})".format(searchterm=searchterm, id=current_user.get_id()))
-    except:
-        results = db.execute("SELECT * FROM goals WHERE (name LIKE '%{searchterm}%' OR desc LIKE '%{searchterm}%') AND private = 0".format(searchterm=searchterm))
-    return render_template("searchresult.html", results=results, term=searchterm)
-
-
-# goal.html renders goal info from result and steps from csv and has form for adding to tasks
-@app.route("/goals/<goal_id>", methods=["GET", "POST"])
-def goal(goal_id):
-    goalid = int(goal_id)
-    result = db.execute("SELECT * FROM goals WHERE goal_id = :goalid", goalid=goalid)
-    result=result[0]
-    name = result["name"].replace("-", " ")
-    steps=[]
-    with open('csvfiles/%s.csv' % (result["name"])) as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            steps.append({"step": row[0], "description": row[1]})
-    if request.method == "POST":
-        # Ensure start date was submitted
-        if not request.form.get("startdate"):
-            return apology("What are goals without a start date?!", 403)
-        startdate = request.form.get("startdate")
-        # Ensure frequency was submitted
-        if not request.form.get("frequency"):
-            return apology("Commit yourself to a frequency!!", 403)
-        # Ensure category was submitted
-        if request.form.get("cat_id") == 0:
-            return apology("Select a valid category!!", 403)
-        frequency = request.form.get("frequency")
-        createtask(startdate, frequency, result, steps) 
-        flash('Added to Google Tasks (view in Calendar/Gmail/App)!')
-    return render_template("goal.html", name=name, goaldata=result, steps=steps, goal_id=goal_id)
-
-
 # Upload file
 # From https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
 UPLOAD_FOLDER = './csvfiles'
@@ -239,6 +198,53 @@ def upload():
             return redirect(request.url)
     else:
         return render_template("upload.html")
+
+# searchresult.html loops through the results, makes button for each one that sends out the id for that result
+@app.route("/searchresults/<searchterm>", methods=["GET", "POST"]) 
+def searchresult(searchterm):
+    try: 
+        results = db.execute("SELECT * FROM goals WHERE (name LIKE '%{searchterm}%' OR desc LIKE '%{searchterm}%') AND (private = 0 OR user_id = {id})".format(searchterm=searchterm, id=current_user.get_id()))
+    except:
+        results = db.execute("SELECT * FROM goals WHERE (name LIKE '%{searchterm}%' OR desc LIKE '%{searchterm}%') AND private = 0".format(searchterm=searchterm))
+    return render_template("searchresult.html", results=results, term=searchterm)
+
+
+# goal.html renders goal info from result and steps from csv and has form for adding to tasks
+@app.route("/goals/<goal_id>", methods=["GET", "POST"])
+def goal(goal_id):
+    goalid = int(goal_id)
+    result = db.execute("SELECT * FROM goals WHERE goal_id = :goalid", goalid=goalid)
+    result=result[0]
+    name = result["name"].replace("-", " ")
+    steps=[]
+    with open('csvfiles/%s.csv' % (result["name"])) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            steps.append({"step": row[0], "description": row[1]})
+    if request.method == "POST":
+        # Ensure start date was submitted
+        if not request.form.get("startdate"):
+            return apology("What are goals without a start date?!", 403)
+        startdate = request.form.get("startdate")
+        # Ensure frequency was submitted
+        if not request.form.get("frequency"):
+            return apology("Commit yourself to a frequency!!", 403)
+        # Ensure category was submitted
+        if request.form.get("cat_id") == 0:
+            return apology("Select a valid category!!", 403)
+        frequency = request.form.get("frequency")
+        createtask(startdate, frequency, result, steps) 
+        flash('Added to Google Tasks (view in Calendar/Gmail/App)!')
+    return render_template("goal.html", name=name, goaldata=result, steps=steps, goal_id=goal_id)
+
+@app.route("/download/<goal_id>")
+def download(goal_id):
+    goalid = int(goal_id)
+    result = db.execute("SELECT * FROM goals WHERE goal_id = :goalid", goalid=goalid)
+    result=result[0]
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                     filename='%s.csv' % (result["name"]),
+                     as_attachment=True)
 
 
 def errorhandler(e):
