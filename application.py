@@ -27,10 +27,10 @@ def after_request(response):
     return response
 
 # Configure session to use filesystem (instead of signed cookies)
-#app.config["SESSION_FILE_DIR"] = mkdtemp()
-#app.config["SESSION_PERMANENT"] = False
-#app.config["SESSION_TYPE"] = "filesystem"
-#Session(app)
+app.config["SESSION_FILE_DIR"] = mkdtemp()
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 app.secret_key = 'many random bytes'
 
@@ -71,7 +71,7 @@ def goal(goal_id):
             return apology("Commit yourself to a frequency!!", 403)
         frequency = request.form.get("frequency")
         createtask(startdate, frequency, result, steps) 
-        #flash('Added to Google Tasks (view in Calendar/Gmail/App)!')
+        flash('Added to Google Tasks (view in Calendar/Gmail/App)!')
     return render_template("goal.html", goaldata=result, steps=steps, goal_id=goal_id)
 
 
