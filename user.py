@@ -18,14 +18,14 @@ class User(UserMixin):
         user = user[0]
         user = User(
             id_=user['id'], name=user['name'], email=user['email'], profile_pic=user['profile_pic']
-        )
+            )
         return user
 
     @staticmethod
     def create(id_, name, email, profile_pic):
         db = SQL("sqlite:///goals.db")
         db.execute(
-            "INSERT INTO user (id, name, email, profile_pic) "
-            "VALUES (?, ?, ?, ?)",
+            "INSERT INTO user (id, name, email, profile_pic, downloaded) "
+            "VALUES (?, ?, ?, ?, 0)",
             (id_, name, email, profile_pic),
         )

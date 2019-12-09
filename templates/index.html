@@ -13,4 +13,110 @@
             <button class="btn btn-primary" type="submit">Search</button>
         </div>
     </form>
+    Try a <a href="/goals/{{ rand }}"><b>Random Goal</b></a>!
+    <br>
+    <br>
+    <div><b>{{ goals }} goals!</b></div>
+    <div><b>Total number of goals people have worked towards:</b> {{ total }}</div>
+    {% if current_user.is_authenticated %}
+        <div><b>Goals you have worked towards:</b> {{ downloaded }}</div>
+    {% endif %}
+    <br>
+    <div class="row row-cols-3 row-cols-md-2"> 
+        <div class="col">
+            <a href="/browse">
+                <div class="card">
+                    <img src="/static/categories/yellow-square-225x225.jpg" class="card-img" alt="all">
+                    <div class="card-img-overlay">
+                        <h4 class="card-title">View all</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col">
+            <a href="/browse/1">
+                <div class="card">
+                    <img src="/static/categories/shutterstock-school___01153058947.jpg" class="card-img" alt="education">
+                    <div class="card-img-overlay">
+                        <h4 class="card-title">Education</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col">
+            <a href="/browse/2">
+                <div class="card">
+                    <img src="/static/categories/heart-flex.jpg" class="card-img img-fluid" alt="health">
+                    <div class="card-img-overlay h-100">
+                        <h4 class="card-title">Health</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row row-cols-3 row-cols-md-2">
+        <div class="col">
+            <a href="/browse/3">
+                <div class="card">
+                    <img src="/static/categories/relationship-square.jpg" class="card-img" alt="career">
+                    <div class="card-img-overlay">
+                        <h4 class="card-title">Relationship</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col">
+            <a href="/browse/4">
+                <div class="card">
+                    <img src="/static/categories/career-ladder-1240.jpg" class="card-img" alt="education">
+                    <div class="card-img-overlay">
+                        <h4 class="card-title">Career</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col">
+            <a href="/browse/5">
+                <div class="card">
+                    <img src="/static/categories/spiritual.jpg" class="card-img" alt="education">
+                    <div class="card-img-overlay">
+                        <h4 class="card-title">Spiritual</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row row-cols-3 row-cols-md-2">
+        <div class="col">
+            <a href="/browse/6">
+                <div class="card">
+                    <img src="/static/categories/money.jpg" class="card-img" alt="career">
+                    <div class="card-img-overlay">
+                        <h4 class="card-title">Financial</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col">
+            <a href="/browse/7">
+                <div class="card">
+                    <img src="/static/categories/personal-growth.jpg" class="card-img" alt="education">
+                    <div class="card-img-overlay">
+                        <h4 class="card-title">Personal Development</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col">
+            <a href="/browse/8">
+                <div class="card">
+                    <img src="/static/categories/img_Square_Blue.jpg" class="card-img" alt="other">
+                    <div class="card-img-overlay">
+                        <h4 class="card-title">Other</h4>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+        
 {% endblock %}

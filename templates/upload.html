@@ -6,12 +6,8 @@
 
 {% block main %}
     <form action="/upload" method="post" enctype=multipart/form-data>
-        <h2>Upload your goal here!</h2>
-        <h4>Format: CSV file without a header, with subgoals in column 1 & corresponding descriptions in column 2.</h4>
-        <h5>(Click "Modify" on any of our goals to download a sample)</h5>
-        <div class="form-group">
-             <input autocomplete="off" autofocus class="form-control" name="file" type="file" required>
-        </div>
+        <h1>Upload your goal here!</h1>
+        <br>
         <div class="form-group">
             <input autocomplete="off" autofocus class="form-control" name="name" placeholder="Goal Name" type="text" required>
         </div>
@@ -31,10 +27,17 @@
                         <option value=8>Other</option>
                     </select>
         </div>
+        {% if current_user.is_authenticated %}
+            <div class="form-group">
+                <input autocomplete="off" autofocus name="private" type="checkbox" value=1>  Keep this goal private
+            </div>
+        {% endif %}
         <div class="form-group">
-            <input autocomplete="off" autofocus name="private" type="checkbox" value=1>  Keep this goal private
+            <input autocomplete="off" autofocus class="form-control" name="file" type="file" required>
         </div>
-        <button class="btn btn-primary" type="submit" value="upload">Upload</button>
+        <b>Format:</b> CSV file without a header, with subgoals in column 1 & corresponding descriptions (optional) in column 2. 
+        <br>(Click "Download & Modify" on any of our <a href="\browse">goals</a> to download a sample)
+        <br><button class="btn btn-primary" type="submit" value="upload">Upload</button>
     </form>    
 
 

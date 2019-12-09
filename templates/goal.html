@@ -5,59 +5,59 @@
 {% endblock %}
 
 {% block main %}
+{% if (goaldata["private"] != 1) or (current_user.is_authenticated and goaldata["user_id"] == user_id) %}
     <h3>{{ name }}</h3>
-    <h5>{{ goaldata["desc"] }}</h5>
+    <h5>{{ goaldata["DESC"] }}</h5>
+    {% if (goaldata["private"] == 1) %}
+        This goal is private to you.
+    {% else %}
+        {{ goaldata["added"] }} people added this goal
+    {% endif %}
     <div class="leftright">
         <div class="left">
-            <form action="{{ '/download/' + goal_id }}" method="get">
-                <button class="btn btn-primary" type="submit">Download & Modify</button>  Reupload <a href="/upload">here</a> to add your own changes.
-            </form>
             <br>
             <ol>
                 {% for step in steps %}
                     <li>{{ step["step"] }}</li>
-                    <ul>
-                        <li>{{ step["description"] }}</li>
-                    </ul>
+                    {% if step["description"] %}
+                        <ul>
+                            {% if 'http' in step["description"] %}
+                                <li><a href={{ step["description"] | regex_search('https?(\\S*)') }}>{{ step["description"] }}</a></li>
+                            {% else %}
+                                <li>{{ step["description"] }}</li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
                 {% endfor %}
             </ol>
+            <form action="{{ '/download/' + goal_id }}" method="get">
+                <button class="btn btn-primary" type="submit">Download & Modify</button>
+                <br>{{ goaldata["branched"] }} people branched this goal.
+                <br>Reupload <a href="/upload">here</a> to add your own changes.
+            </form>
         </div>
         <div class="right">
             <form action="{{ '/goals/' + goal_id }}" method="post">
                 <div class="form-group">
                         Start Date: <input autocomplete="off" autofocus class="form-control" name="startdate" placeholder="Start Date" type="date" required>
                 </div>
-                <script>
-                    function toggleField(hideObj,showObj){
-                        hideObj.disabled=true;        
-                        hideObj.style.display='none';
-                        showObj.disabled=false;   
-                        showObj.style.display='inline';
-                        showObj.focus();
-                    }
-                </script>
                 <div class="form-group">
-                        Frequency: <select name="frequency"
-                                           id="frequency"
-                                           onchange="if(this.options[this.selectedIndex].value=='customOption'){
-                                           toggleField(this,this.nextSibling);
-                                           this.selectedIndex='0';
-                                            }">
-                            <option value=1>Daily</option>
-                            <option value=2>Every other day</option>
-                            <option value=7>Weekly</option>
-                            <option value=14>Every other week</option>
-                            <option value="customOption">Custom</option>
-                        </select>
-                        <input name="days" style="display:none;" disabled="disabled" 
-                        onblur="if(this.value==''){toggleField(this,this.previousSibling);}">
+                    Frequency: 
+                    <input type="text" placeholder="Number of days" list="frequency" name="frequency">
+                    <datalist name="frequency" id="frequency">
+                        <option value=1>Daily</option>
+                        <option value=2>Every other day</option>
+                        <option value=7>Weekly</option>
+                        <option value=14>Every other week</option>
+                    </datalist>
                 </div>
-                <button class="btn btn-primary" type="submit">Go!</button>
+                <button class="btn btn-primary" type="submit" value="Submit">Go!</button>
             </form>
             <br>
             Please remain on this page until complete.     
         </div>
     </div>
-
-
+{% else %}
+    <h1>This goal is private. Sorry!</h1>
+{% endif %}
 {% endblock %}

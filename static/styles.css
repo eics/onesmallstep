@@ -69,7 +69,30 @@ main .search
     margin-right: 10px;
 }
 
-datalist
+input::-webkit-calendar-picker-indicator {
+    opacity: 100;
+ }
+
+.card-img
 {
-    display: none;
+    object-fit: cover;
+}
+
+.row
+{
+    height: 300px;
+}
+
+a:hover
+{
+    text-decoration: none;
+}
+
+footer
+{
+    text-align: center;
+
+.left-text
+{
+    text-align: left;
 }

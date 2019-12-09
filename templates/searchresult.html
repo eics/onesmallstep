@@ -11,7 +11,14 @@
     {% for row in results %}
         <tr>
             <td class="search"><a href="/goals/{{ row['goal_id'] }}">{{ row["name"].replace("-", ' ') }}</a></td>
-            <td>{{ row["desc"] }}</td>
+            <td class="search">{{ row["DESC"] }}</td>
+            <td class="search">
+                {% if row['private'] != 1%}
+                    {{ row["added"] }} people added
+                {% else %}
+                    This is private to you.
+                {% endif %}
+            </td>
         </tr>        
     {% endfor %}
     </table>  
