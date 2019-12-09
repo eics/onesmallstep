@@ -39,5 +39,3 @@ You can modify existing goals to suit your needs by navigating to the desired go
 
 ## Sign-in
 You can sign in using your Google account by clicking the "Google Sign-In" button at the top right corner. Once signed in, you can sign back out by clicking the "Logout" button. Signing in allows you to keep track of how many goals you have decided to work towards achieving (as a motivator!) as well as upload private goals that only you can view. Uploading goals as private is also a good way to save goals for easy access on the /private page. 
-
-## 

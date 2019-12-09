@@ -296,8 +296,12 @@ def goal(goal_id):
 def download(goal_id):
     # Update goal downloaded count
     db.execute("UPDATE goals SET branched = branched +1 WHERE goal_id = :goalid", goalid=goal_id)
+    goalid = int(goal_id)
+    result = db.execute("SELECT * FROM goals WHERE goal_id = :goalid", goalid=goalid)
+    result=result[0]
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                      filename='%s.csv' % (goal_id),
+                     attachment_filename='%s.csv' % (result["name"]),
                      as_attachment=True)
 
 
