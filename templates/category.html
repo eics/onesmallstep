@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Browse
+{% endblock %}
+
+{% block main %}
+    <h1>{{ name }}</h1>
+    <br>
+    <div><b>Number of goals:</b> {{ count }}</div>
+    <br>
+    <table>
+    {% for row in goaldata %}
+        <tr>
+            <td class="search"><a href="/goals/{{ row['goal_id'] }}">{{ row["name"].replace("-", ' ') }}</a></td>
+            <td class="search">{{ row["DESC"] }}</td>
+            <td class="search">
+                {% if row['private'] != 1%}
+                    {{ row["added"] }} people added
+                {% else %}
+                    This is private to you.
+                {% endif %}
+            </td>
+        </tr>        
+    {% endfor %}
+    </table>   
+{% endblock %}
