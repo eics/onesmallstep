@@ -15,7 +15,7 @@ Our site helps you make smart goals by allowing you to search or upload your own
 
 ## Getting Started
 
-In terminal: 
+After cloning this repo (won't run on CS50 IDE!), execute in terminal the following: 
 
 Make sure you have the requirements:
 ```pip install -r requirements.txt```
