@@ -18,13 +18,13 @@ Our site helps you make smart goals by allowing you to search or upload your own
 In terminal: 
 
 Make sure you have the requirements:
-'''pip install -r requirements.txt'''
+```pip install -r requirements.txt```
 
 Set the FLASK_APP environment variable:
-'''export FLASK_APP=application.py'''
+```export FLASK_APP=application.py```
 
 Run: 
-'''flask run'''
+```flask run```
 
 ## Basic Usage
 When you open up the web app to the main page, you should be presented with a search bar where you can search for a goal that you would like to pursue. Selecting one of the goals that appears in the search results will take you to a goal page, where you can read the steps and step descriptions that make up the overall goal. You can then set the start date for the goal and your desired step frequency. Once you click "Go!" the web app will add the steps to your Google Tasks under a parent task for the goal, which you can view in Google Calendar, Gmail, or the Google Tasks app. 
