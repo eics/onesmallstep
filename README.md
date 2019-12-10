@@ -21,7 +21,7 @@ Make sure you have the requirements:
 ```pip install -r requirements.txt```
 
 Set the FLASK_APP environment variable:
-```export FLASK_APP=application.py```
+```export FLASK_APP=application```
 
 Run: 
 ```flask run```
